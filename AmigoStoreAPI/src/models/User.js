@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelizeConnection = require('../utils/db');
+const useBcrypt = require('sequelize-bcrypt');
 
 class User extends Model { }
 
@@ -45,6 +46,10 @@ User.init({
     schema: "AmigoStore"
 });
 
-
+useBcrypt(User, {
+    field: 'password', // secret field to hash, default: 'password'
+    rounds: 12, // used to generate bcrypt salt, default: 12
+    compare: 'authenticate', // method used to compare secrets, default: 'authenticate'
+});
 
 module.exports = User;

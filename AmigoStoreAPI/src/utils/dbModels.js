@@ -8,14 +8,11 @@ const sequelizeConnection = require('./db');
 
 
 Adress.User = Adress.belongsTo(User);
-User.Cards = User.hasMany(Card);
+User.hasMany(Card);
 Product.productCategory = Product.belongsTo(ProductCategory);
 
-Rating.belongsToMany(User, { through: "user_rating" });
-User.belongsToMany(Rating, { through: "user_rating" });
-
-Rating.belongsToMany(Product, { through: "product_rating" });
-Product.belongsToMany(Rating, { through: "product_rating" });
+User.belongsToMany(Product, { through: Rating });
+Product.belongsToMany(User, { through: Rating });
 
 
 sequelizeConnection.sync();
