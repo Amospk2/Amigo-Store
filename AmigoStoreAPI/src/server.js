@@ -13,7 +13,7 @@ api.use(session({
     resave: false,
     saveUninitialized: true,
     secret: process.env.PRIVATE_KEY,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 }
+    cookie: { maxAge: process.env.SESSION_LIFETIME}
 }))
 api.use(routes);
 

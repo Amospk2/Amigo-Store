@@ -1,8 +1,6 @@
 const User = require('../models/User');
 const jsonwebtoken = require('jsonwebtoken');
 
-
-
 module.exports = {
     async auth(req, res) {
         try {
@@ -44,5 +42,9 @@ module.exports = {
         } catch (error) {
             return res.status(401).json({ message: 'Invalid Token' });
         }
+    },
+    async logout(req, res) {
+        req.session.destroy();
+        res.status(200).send('logout');
     }
 }
