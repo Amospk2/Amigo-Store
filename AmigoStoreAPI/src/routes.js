@@ -7,13 +7,14 @@ const cardController = require('./controllers/CardController');
 const ProductCategoryController = require('./controllers/ProductCategoryController');
 const ProductController = require('./controllers/ProductController');
 const RatingController = require('./controllers/RatingController');
-const User = require('./models/User');
-const Card = require('./models/Card');
+const multer = require('multer');
+const parser = multer({ dest: 'public/uploads/' });
+
 
 // User Routes
 routes.get("/users/", UserController.list);
 routes.get("/users/:id", UserController.show);
-routes.post("/users", UserController.create);
+routes.post("/users", parser.single('image'), UserController.create);
 routes.put("/users/:id", UserController.update);
 routes.delete("/users/:id", UserController.delete);
 
@@ -45,7 +46,7 @@ routes.delete("/product-category/:id", ProductCategoryController.delete);
 // Product Routes
 routes.get("/product/", ProductController.list);
 routes.get("/product/:id", ProductController.show);
-routes.post("/product", ProductController.create);
+routes.post("/product", parser.single('image'), ProductController.create);
 routes.put("/product/:id", ProductController.update);
 routes.delete("/product/:id", ProductController.delete);
 
@@ -62,24 +63,8 @@ routes.post("/auth", authController.auth);
 routes.get("/valide-token", authController.tokenValidate);
 routes.get('/logout', authController.logout);
 
-
-
 routes.get('/', async (req, res) => {
-    const user = await User.findOne({ where: { idUser: 1 } });
-
-
-    const card = await Card.create({
-        number: '22222',
-        cvv: '333',
-        expDate: '02-02-2010',
-    });
-
-    user.addCard(card);
-    user.save();
-
-
-
-    res.json(await User.findAll({ include: Card }));
+    res.status(200).send('Welcome to nodejs server!');
 });
 
 

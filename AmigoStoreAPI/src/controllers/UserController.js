@@ -1,5 +1,8 @@
 const User = require('../models/User');
 const { Op } = require("sequelize");
+const multer = require('multer');
+const parser = multer({ dest: 'public/uploads/' });
+
 
 module.exports = {
     async list(req, res) {
@@ -24,17 +27,24 @@ module.exports = {
     },
     async create(req, res) {
         try {
-            const { name, email, birthDate, image, password } = req.body;
-            if (await User.findOne({ where: { email: email } })) {
-                return res.status(200).json({ msg: 'Usuário já existe.' });
-            }
-            if (name, email, birthDate, image, password) {
-                const user = await User.create({ name, email, type: "User", birthDate, image, password });
-                res.status(201).send(user);
+            if (req.file == undefined) {
+                return res.status(404).send({ msg: 'Preencha os campos corretamente antes de enviar.' });
             } else {
-                return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                const image = `/uploads/${req.file.filename}`;
+                const { name, email, birthDate, password } = req.body;
+                if (await User.findOne({ where: { email: email } })) {
+                    return res.status(200).json({ msg: 'Usuário já existe.' });
+                }
+                if (name, email, birthDate, image, password) {
+                    const user = await User.create({ name, email, type: "User", birthDate, image, password });
+                    res.status(201).send(user);
+                } else {
+                    return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                }
             }
+
         } catch (error) {
+            console.log(error);
             res.status(500).send({ msg: 'Falha ao criar usuário.' }, error);
         }
     },

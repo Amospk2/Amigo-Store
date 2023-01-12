@@ -3,22 +3,28 @@ const Product = require('../models/Product');
 module.exports = {
     async create(req, res) {
         try {
-            const { titulo, descricao, preco, quantidade, tags, image, categoriaID } = req.body;
-            if (titulo, descricao, preco, quantidade, tags, image, categoriaID) {
-                const product = await Product.create(
-                    {
-                        title: titulo, description: descricao,
-                        price: preco, quantity: quantidade,
-                        tags: tags, image: image,
-                        ProductCategoryIdProductCategory: categoriaID
-                    }
-                );
-                return res.status(201).json(product);
+            if (req.file == undefined) {
+                return res.status(404).send({ msg: 'Preencha os campos corretamente antes de enviar.' });
             } else {
-                
-                return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                const image = `/uploads/${req.file.filename}`;
+                const { titulo, descricao, preco, quantidade, tags, categoriaID } = req.body;
+                if (titulo, descricao, preco, quantidade, tags, categoriaID) {
+                    const product = await Product.create(
+                        {
+                            title: titulo, description: descricao,
+                            price: preco, quantity: quantidade,
+                            tags: tags, image: image,
+                            ProductCategoryIdProductCategory: categoriaID
+                        }
+                    );
+                    return res.status(201).json(product);
+                } else {
+
+                    return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                }
             }
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ msg: 'Falha ao registrar produto.' }, error);
         }
     },
