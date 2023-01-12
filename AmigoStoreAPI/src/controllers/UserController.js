@@ -5,43 +5,73 @@ module.exports = {
     async list(req, res) {
         try {
             const user = await User.findAll()
-            return res.status(200).json(user);
+            return res.status(200).json({ data: user });
         } catch (error) {
-            return console.error("Falha ao listar usuários.", error);
+            return res.status(500).json("Falha ao listar usuários.", error);
         }
     },
     async show(req, res) {
         try {
-            const user = await User.findAll({ where: { id: req.params.id } });
-            return res.status(200).json(user);
+            const user = await User.findOne({ where: { idUser: req.params.id } });
+            if (user)
+                return res.status(200).json({ data: user });
+            else
+                return res.status(404).json({ msg: 'Usuário não encontrado.' });
         } catch (error) {
-            return console.error({ msg: `Falha ao buscar usuário.` }, error);
+            console.log(error);
+            return res.status(500).json({ msg: 'Falha ao buscar usuário.' }, error);
         }
     },
     async create(req, res) {
         try {
             const { name, email, birthDate, image, password } = req.body;
-            const user = await User.create({ name, email, type: "User", birthDate, image, password });
-            res.status(201).send(user);
+            if (await User.findOne({ where: { email: email } })) {
+                return res.status(200).json({ msg: 'Usuário já existe.' });
+            }
+            if (name, email, birthDate, image, password) {
+                const user = await User.create({ name, email, type: "User", birthDate, image, password });
+                res.status(201).send(user);
+            } else {
+                return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+            }
         } catch (error) {
-            res.status(400).send({ msg: `Falha ao criar usuário.` }, error);
+            res.status(500).send({ msg: 'Falha ao criar usuário.' }, error);
         }
     },
     async update(req, res) {
-        const { name, email, birthDate, type, image, password } = req.body;
         try {
-            const user = await User.update({ name, email, birthDate, type, image, password }, { where: { id: { [Op.eq]: req.params.id } } });
-            return res(200).json(user);
-        } catch (err) {
-            return res.status(400).json({ msg: `Falha ao atualizar usuário.` }, err);
+            const { name, email, birthDate, type, image, password } = req.body;
+
+            if (name, email, birthDate, type, image, password) {
+                if (await findUserWithId(req.params.id)) {
+                    return res.status(404).json({ msg: 'Usuário não encontrado.' });
+                }
+
+                await User.update({ name, email, birthDate, type, image, password }, { where: { idUser: { [Op.eq]: req.params.id } } });
+                const user = await User.findOne({ where: { idUser: req.params.id } });
+                return res(201).json({ data: user });
+
+            } else {
+                return res.status(404).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+            }
+
+        } catch (error) {
+            return res.status(500).json({ msg: 'Falha ao atualizar usuário.' }, error);
         }
     },
     async delete(req, res) {
         try {
-            await User.destroy({ where: { id: req.params.id } });
-            return res.json({ msg: `Exclusão feita com sucesso!` });
+            if (await findUserWithId(req.params.id)) {
+                return res.status(200).json({ msg: 'Usuário não encontrado.' });
+            }
+            await User.destroy({ where: { idUser: req.params.id } });
+            return res.status(200).json({ msg: 'Exclusão feita com sucesso!' });
         } catch (error) {
-            return console.error({ msg: `Falha ao excluir usuário.` }, error);
+            return res.status(500).json({ msg: 'Falha ao excluir usuário.' }, error);
         }
     },
+}
+
+async function findUserWithId(id) {
+    return await User.findOne({ where: { idUser: id } }) == null;
 }

@@ -9,11 +9,12 @@ const cookieParser = require('cookie-parser');
 const api = express();
 api.use(express.json());
 api.use(cookieParser());
+
 api.use(session({
     resave: false,
     saveUninitialized: true,
     secret: process.env.PRIVATE_KEY,
-    cookie: { maxAge: process.env.SESSION_LIFETIME}
+    cookie: { maxAge: 1000 * 60 * 60 }
 }))
 api.use(routes);
 

@@ -2,7 +2,13 @@ const express = require('express');
 const routes = express.Router();
 const UserController = require('./controllers/UserController');
 const authController = require('./controllers/AuthController');
-const adressController = require('./controllers/AdressController');
+const addressController = require('./controllers/AddressController');
+const cardController = require('./controllers/CardController');
+const ProductCategoryController = require('./controllers/ProductCategoryController');
+const ProductController = require('./controllers/ProductController');
+const RatingController = require('./controllers/RatingController');
+const User = require('./models/User');
+const Card = require('./models/Card');
 
 // User Routes
 routes.get("/users/", UserController.list);
@@ -13,23 +19,68 @@ routes.delete("/users/:id", UserController.delete);
 
 
 // Adress Routes
-routes.get("/adress/", adressController.list);
-routes.get("/adress/:id", adressController.show);
-routes.post("/adress", adressController.create);
-routes.put("/adress/:id", adressController.update);
-routes.delete("/adress/:id", adressController.delete);
+routes.get("/adress/", addressController.list);
+routes.get("/adress/:id", addressController.show);
+routes.post("/adress", addressController.create);
+routes.put("/adress/:id", addressController.update);
+routes.delete("/adress/:id", addressController.delete);
 
 
+// Card Routes
+routes.get("/card/", cardController.list);
+routes.get("/card/:id", cardController.show);
+routes.post("/card", cardController.create);
+routes.put("/card/:id", cardController.update);
+routes.delete("/card/:id", cardController.delete);
+
+
+// Product Category Routes
+routes.get("/product-category/", ProductCategoryController.list);
+routes.get("/product-category/:id", ProductCategoryController.show);
+routes.post("/product-category", ProductCategoryController.create);
+routes.put("/product-category/:id", ProductCategoryController.update);
+routes.delete("/product-category/:id", ProductCategoryController.delete);
+
+
+// Product Routes
+routes.get("/product/", ProductController.list);
+routes.get("/product/:id", ProductController.show);
+routes.post("/product", ProductController.create);
+routes.put("/product/:id", ProductController.update);
+routes.delete("/product/:id", ProductController.delete);
+
+
+// Rating Routes
+routes.get("/rating/user-ratings/:id", RatingController.list);
+routes.get("/rating/product-ratings/:id", RatingController.show);
+routes.post("/rating", RatingController.create);
+routes.put("/rating/:id", RatingController.update);
+routes.delete("/rating/:id", RatingController.delete);
 
 // Auth Routes
 routes.post("/auth", authController.auth);
 routes.get("/valide-token", authController.tokenValidate);
 routes.get('/logout', authController.logout);
+
+
+
 routes.get('/', async (req, res) => {
-    res.send("Your is in NodeJs Server!");
+    const user = await User.findOne({ where: { idUser: 1 } });
+
+
+    const card = await Card.create({
+        number: '22222',
+        cvv: '333',
+        expDate: '02-02-2010',
+    });
+
+    user.addCard(card);
+    user.save();
+
+
+
+    res.json(await User.findAll({ include: Card }));
 });
-
-
 
 
 module.exports = routes;

@@ -22,7 +22,7 @@ module.exports = {
                 return res.status(200).json({ data: { token } });
             } else {
 
-                return res.status(400).send("Check Your Request Body!");
+                return res.status(401).json({ msg: "usuário não encontrado." });
             }
         } catch (error) {
             res.status(400).send(error);
@@ -45,6 +45,6 @@ module.exports = {
     },
     async logout(req, res) {
         req.session.destroy();
-        res.status(200).send('logout');
+        res.status(200).json({ msg: 'logout' });
     }
 }
