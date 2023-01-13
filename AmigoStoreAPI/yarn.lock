@@ -83,6 +83,7 @@ __metadata:
     nodemon: ^2.0.20
     sequelize: ^6.28.0
     sequelize-bcrypt: ^1.2.0
+    swagger-ui-express: ^4.6.0
   languageName: unknown
   linkType: soft
 
@@ -1987,6 +1988,24 @@ __metadata:
   dependencies:
     has-flag: ^3.0.0
   checksum: 95f6f4ba5afdf92f495b5a912d4abee8dcba766ae719b975c56c084f5004845f6f5a5f7769f52d53f40e21952a6d87411bafe34af4a01e65f9926002e38e1dac
+  languageName: node
+  linkType: hard
+
+"swagger-ui-dist@npm:>=4.11.0":
+  version: 4.15.5
+  resolution: "swagger-ui-dist@npm:4.15.5"
+  checksum: b032ecc1245e10729d0fb0fc681fc61115a78925b9410fe0fa5fe025a0a3e7d1505dacc3b5d7d2355835d118162843ad9a754a810010a4bbf65ef71466e40512
+  languageName: node
+  linkType: hard
+
+"swagger-ui-express@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "swagger-ui-express@npm:4.6.0"
+  dependencies:
+    swagger-ui-dist: ">=4.11.0"
+  peerDependencies:
+    express: ">=4.0.0"
+  checksum: 8e5e2bf431f4b2207fc4c07eeaee78ec983fae4ab14b6df8fd6d87bd7edf0a9c644bf32bb251b8478a9bad7b1617d6bec56c6b87208f5eddb18840832abf55a3
   languageName: node
   linkType: hard
 

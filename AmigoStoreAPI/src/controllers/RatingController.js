@@ -3,9 +3,9 @@ const Rating = require('../models/Rating');
 module.exports = {
     async create(req, res) {
         try {
-            const { descricao, rate, userID, productID } = req.body;
-            if (descricao, rate, userID, productID) {
-                const rating = await Rating.create({ description: descricao, rate: rate, userIdUser: userID, ProductIdProduct: productID });
+            const { description, rate, userID, productID } = req.body;
+            if (description, rate, userID, productID) {
+                const rating = await Rating.create({ description: description, rate: rate, userIdUser: userID, ProductIdProduct: productID });
                 return res.status(201).json(rating);
             } else {
 
@@ -21,14 +21,14 @@ module.exports = {
     },
     async update(req, res) {
         try {
-            const { descricao, rate, userID, productID } = req.body;
+            const { description, rate, userID, productID } = req.body;
             const rating = await Rating.findOne({ where: { idRating: req.params.id } });
-            if (descricao, rate, userID, productID) {
+            if (description, rate, userID, productID) {
                 if (!rating) {
                     return res.status(404).json({ msg: 'Avaliação não encontrada.' });
                 }
                 await Rating.update(
-                    { description: descricao, rate: rate, userIdUser: userID, ProductIdProduct: productID },
+                    { description: description, rate: rate, userIdUser: userID, ProductIdProduct: productID },
                     { where: { idRating: req.params.id } }
                 );
 
@@ -41,7 +41,7 @@ module.exports = {
             return res.status(500).json({ msg: 'Falha ao atualizar avaliação.' }, error);
         }
     },
-    async show(req, res) {
+    async productRatings(req, res) {
         try {
             const rating = await Rating.findAll({ where: { ProductIdProduct: req.params.id }, });
             if (rating)
@@ -52,7 +52,7 @@ module.exports = {
             return res.status(500).json({ msg: 'Falha ao buscar avaliação.' }, error);
         }
     },
-    async list(req, res) {
+    async userRatings(req, res) {
         try {
             const rating = await Rating.findAll({ userIdUser: req.params.id });
             return res.status(200).json(rating);

@@ -16,6 +16,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
     "sequelize": "^6.28.0",
-    "sequelize-bcrypt": "^1.2.0"
+    "sequelize-bcrypt": "^1.2.0",
+    "swagger-ui-express": "^4.6.0"
   }
 }

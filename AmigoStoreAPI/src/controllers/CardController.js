@@ -69,9 +69,9 @@ module.exports = {
             return res.status(500).json({ msg: 'Falha ao buscar cartão.' }, error);
         }
     },
-    async list(req, res) {
+    async findUserCards(req, res) {
         try {
-            const card = await Card.findAll();
+            const card = await Card.findAll({ where: { userIdUser: req.params.id } });
             return res.status(200).json(card);
         } catch (error) {
             return res.status(500).json({ msg: 'Falha ao buscar cartões.' }, error);

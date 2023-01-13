@@ -4,18 +4,18 @@ const { Op } = require("sequelize");
 module.exports = {
     async create(req, res) {
         try {
-            const { rua, bairro, cep, complemento, userID } = req.body;
-            if (rua, bairro, cep, complemento, userID) {
+            const { street, neighborhood, zipCode, complement, userID } = req.body;
+            if (street, neighborhood, zipCode, complement, userID) {
                 const adress = await Adress.create({
-                    street: rua,
-                    neighborhood: bairro,
-                    zipCode: cep,
-                    complement: complemento,
+                    street: street,
+                    neighborhood: neighborhood,
+                    zipCode: zipCode,
+                    complement: complement,
                     userIdUser: userID
                 });
                 return res.status(201).json(adress);
             } else {
-                return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                return res.status(404).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
             }
         } catch (error) {
             return res.status(500).json({ msg: 'Falha ao registrar endereço.' }, error);
@@ -23,13 +23,13 @@ module.exports = {
     },
     async update(req, res) {
         try {
-            const { rua, bairro, cep, complemento } = req.body;
-            if (rua, bairro, cep) {
+            const { street, neighborhood, zipCode, complement } = req.body;
+            if (street, neighborhood, zipCode) {
                 if (await findAdressWithId(req.params.id)) {
                     return res.status(404).json({ msg: 'Endereço não encontrado.' });
                 }
                 await Adress.update(
-                    { street: rua, neighborhood: bairro, zipCode: cep, complement: complemento },
+                    { street: street, neighborhood: neighborhood, zipCode: zipCode, complement: complement },
                     { where: { idAdress: { [Op.eq]: req.params.id } } }
                 );
                 const address = await Adress.findOne({ where: { idAdress: { [Op.eq]: req.params.id } } });
@@ -53,9 +53,9 @@ module.exports = {
             return res.status(500).json({ msg: 'Falha ao buscar endereço.' }, error);
         }
     },
-    async list(req, res) {
+    async findUserAdress(req, res) {
         try {
-            const adresses = await Adress.findAll();
+            const adresses = await Adress.findAll({ where: { userIdUser: req.params.id } });
             return res.status(200).json(adresses);
         } catch (error) {
             return res.status(500).json({ msg: 'Falha ao buscar endereço(s).' }, error);

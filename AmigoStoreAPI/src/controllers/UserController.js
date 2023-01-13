@@ -33,13 +33,13 @@ module.exports = {
                 const image = `/uploads/${req.file.filename}`;
                 const { name, email, birthDate, password } = req.body;
                 if (await User.findOne({ where: { email: email } })) {
-                    return res.status(200).json({ msg: 'Usuário já existe.' });
+                    return res.status(404).json({ msg: 'Usuário já existe.' });
                 }
                 if (name, email, birthDate, image, password) {
                     const user = await User.create({ name, email, type: "User", birthDate, image, password });
                     res.status(201).send(user);
                 } else {
-                    return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                    return res.status(404).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
                 }
             }
 
@@ -62,7 +62,7 @@ module.exports = {
                 return res(201).json({ data: user });
 
             } else {
-                return res.status(404).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
+                return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
             }
 
         } catch (error) {
@@ -72,7 +72,7 @@ module.exports = {
     async delete(req, res) {
         try {
             if (await findUserWithId(req.params.id)) {
-                return res.status(200).json({ msg: 'Usuário não encontrado.' });
+                return res.status(404).json({ msg: 'Usuário não encontrado.' });
             }
             await User.destroy({ where: { idUser: req.params.id } });
             return res.status(200).json({ msg: 'Exclusão feita com sucesso!' });

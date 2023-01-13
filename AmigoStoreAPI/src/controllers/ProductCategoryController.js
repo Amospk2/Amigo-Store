@@ -4,9 +4,9 @@ const ProductCategory = require('../models/ProductCategory');
 module.exports = {
     async create(req, res) {
         try {
-            const { nome, descricao } = req.body;
-            if (nome, descricao) {
-                const productCategory = await ProductCategory.create({ name: nome, description: descricao });
+            const { name, description } = req.body;
+            if (name, description) {
+                const productCategory = await ProductCategory.create({ name: name, description: description });
                 return res.status(201).json(productCategory);
             } else {
                 return res.status(400).json({ msg: 'Preencha os campos corretamente antes de enviar.' });
@@ -17,14 +17,14 @@ module.exports = {
     },
     async update(req, res) {
         try {
-            const { nome, descricao } = req.body;
+            const { name, description } = req.body;
             const category = await ProductCategory.findOne({ where: { idProductCategory: req.params.id } });
-            if (nome, descricao) {
+            if (name, description) {
                 if (!category) {
                     return res.status(404).json({ msg: 'Categoria não encontrado.' });
                 }
                 await ProductCategory.update(
-                    { name: nome, description: descricao },
+                    { name: name, description: description },
                     { where: { idProductCategory: req.params.id } }
                 );
 
