@@ -1,0 +1,1699 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "AmigoStore",
+        "description": "Domentação para a Amigo Store API! Aqui estão todas as rotas da API junto com o conteudo esperado no body do request e o que vai ser retornado no response!",
+        "version": "1.0.0"
+    },
+    "basePath": "/",
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "paths": {
+        "/auth": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Realiza a autentificação de um usuário.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Usuário para ser autentificado. ",
+                        "required": true,
+                        "example": {
+                            "email": "string",
+                            "password": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "type": "object",
+                            "item": {
+                                "data": {
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW1vc3NAZ21haWwuY29tIiwiaWF0IjoxNjczNjM1NDc2LCJleHAiOjE2NzM2MzkwNzZ9.r45fn-Ma_6lTUOkh25MF8eWVxShxyLM4Wyac-7Jz5F0"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "404": {
+                        "description": "Dados incorretos, verifique o contéudo de faça uma nova requisição."
+                    },
+                    "500": {
+                        "description": "Falha ao autentificar usuário."
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Faz o logout do usuário no sistema.",
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso."
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Retorna todos os usuários do sistema.",
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao listar usuários."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Cria um novo usuário no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Usuário para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "name": "string",
+                            "email": "string",
+                            "birthDate": "date-time",
+                            "password": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "Imagem para o perfil do usuário.",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "404": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "500": {
+                        "description": "Falha ao criar usuário."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Encontra um usuário pelo ID.",
+                "description": "Retorna um usuário.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar usuário."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Encontra um usuário pelo ID e atualiza no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Usuário para ser atualizado. ",
+                        "required": true,
+                        "example": {
+                            "name": "string",
+                            "email": "string",
+                            "birthDate": "date-time",
+                            "password": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "Imagem para o perfil do usuário.",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar usuário."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Encontra um usuário pelo ID e deleta do sistema.",
+                "description": "Retorna uma mensagem de sucesso ou erro.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exclusão feita com sucesso!"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao excluir usuário."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/product": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Retorna todos os produtos do sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao listar produtos."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Cria um novo produto no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Produto para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "title": "string",
+                            "description": "text",
+                            "price": "float",
+                            "quantity": "integer",
+                            "tags": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "Imagem para o perfil do produto.",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "500": {
+                        "description": "Falha ao criar produto."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Encontra um produto pelo ID.",
+                "description": "Retorna um produto.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "404": {
+                        "description": "Produto não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar produto."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Encontra um usuário pelo ID e atualiza no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Produto para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "title": "string",
+                            "description": "text",
+                            "price": "float",
+                            "quantity": "integer",
+                            "tags": "string"
+                        }
+                    },
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "Imagem para o perfil do produto.",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "404": {
+                        "description": "Produto não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar produto."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Encontra um produto pelo ID e deleta do sistema.",
+                "description": "Retorna uma mensagem de sucesso ou erro.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exclusão feita com sucesso!"
+                    },
+                    "404": {
+                        "description": "Produto não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao excluir produto."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/address": {
+            "post": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Cria um novo endereço no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Endereço para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "street": "string",
+                            "neighborhood": "string",
+                            "zipCode": "string",
+                            "complement": "string",
+                            "userID": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso."
+                    },
+                    "404": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "500": {
+                        "description": "Falha ao criar endereço."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/address/{id}": {
+            "get": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Encontra todos os endereços referentes relacionados a um ID de usuário.",
+                "description": "Retorna uma lista de endereços.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Address"
+                        }
+                    },
+                    "404": {
+                        "description": "Endereço não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar endereço."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Encontra um endereço pelo ID e atualiza no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Informações do endereço para ser atualizado. ",
+                        "required": true,
+                        "example": {
+                            "street": "string",
+                            "neighborhood": "string",
+                            "zipCode": "string",
+                            "complement": "string",
+                            "userID": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Address"
+                        }
+                    },
+                    "400": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "404": {
+                        "description": "Endereço não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar endereço."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Encontra um endereço pelo ID e deleta do sistema.",
+                "description": "Retorna uma mensagem de sucesso ou erro.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do endereço",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exclusão feita com sucesso!"
+                    },
+                    "404": {
+                        "description": "Endereço não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao excluir endereço."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/address/show/{id}": {
+            "get": {
+                "tags": [
+                    "Address"
+                ],
+                "summary": "Encontra um endereço a partir do ID dele.",
+                "description": "Retorna um endereço.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do endereço",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Address"
+                        }
+                    },
+                    "404": {
+                        "description": "Endereço não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar endereço."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/card": {
+            "post": {
+                "tags": [
+                    "Card"
+                ],
+                "summary": "Cria um novo cartão no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Cartão para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "number": "string",
+                            "cvv": "integer",
+                            "expDate": "date-time",
+                            "userID": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso."
+                    },
+                    "404": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "500": {
+                        "description": "Falha ao criar cartão."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/card/{id}": {
+            "get": {
+                "tags": [
+                    "Card"
+                ],
+                "summary": "Encontra todos os cartões relacionados a um ID de usuário.",
+                "description": "Retorna uma lista de cartões.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Card"
+                        }
+                    },
+                    "404": {
+                        "description": "Cartão não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar cartão."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Card"
+                ],
+                "summary": "Encontra um cartão pelo ID e atualiza no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Informações do cartão para ser atualizado. ",
+                        "required": true,
+                        "example": {
+                            "number": "string",
+                            "cvv": "integer",
+                            "expDate": "date-time",
+                            "userID": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Address"
+                        }
+                    },
+                    "400": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "404": {
+                        "description": "Cartão não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar cartão."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Card"
+                ],
+                "summary": "Encontra um cartão pelo ID e atualiza no sistema.",
+                "description": "Retorna uma mensagem de sucesso ou erro.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cartão",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exclusão feita com sucesso!"
+                    },
+                    "404": {
+                        "description": "Cartão não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao excluir cartão."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/card/show/{id}": {
+            "get": {
+                "tags": [
+                    "Card"
+                ],
+                "summary": "Encontra um cartão a partir do ID dele.",
+                "description": "Retorna um cartão.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cartão",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/card"
+                        }
+                    },
+                    "404": {
+                        "description": "Cartão não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar cartão."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/product-category": {
+            "get": {
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Retorna todos as categorias de produto do sistema.",
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ProductCategory"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao registrar Categoria."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Cria uma nova categoria no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Categoria para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "name": "string",
+                            "description": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/ProductCategory"
+                        }
+                    },
+                    "404": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "500": {
+                        "description": "Falha ao criar categoria."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/product-category/{id}": {
+            "get": {
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Encontra uma categoria pelo ID.",
+                "description": "Retorna uma categoria.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/ProductCategory"
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar categoria."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Encontra um categoria pelo ID e atualiza no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Categoria para ser atualizada. ",
+                        "required": true,
+                        "example": {
+                            "name": "string",
+                            "description": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/ProductCategory"
+                        }
+                    },
+                    "400": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "404": {
+                        "description": "Categoria não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar categoria."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Product Category"
+                ],
+                "summary": "Encontra uma categoria pelo ID e deleta do sistema.",
+                "description": "Retorna uma mensagem de sucesso ou erro.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exclusão feita com sucesso!"
+                    },
+                    "404": {
+                        "description": "Categoria não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao excluir categoria."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/rating/user-ratings/{id}": {
+            "get": {
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Encontra uma avaliação a partir do ID do usuário.",
+                "description": "Retorna uma avaliação.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Rating"
+                        }
+                    },
+                    "404": {
+                        "description": "Avaliação não encontrada."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar Avaliação."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/rating/product-ratings/{id}": {
+            "get": {
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Encontra uma avaliação a partir do ID do produto.",
+                "description": "Retorna uma avaliação.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Rating"
+                        }
+                    },
+                    "404": {
+                        "description": "Avaliação não encontrada."
+                    },
+                    "500": {
+                        "description": "Falha ao buscar Avaliação."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/rating": {
+            "post": {
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Cria uma nova avaliação no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Avaliação para ser criado. ",
+                        "required": true,
+                        "example": {
+                            "description": "string",
+                            "rate": "integer",
+                            "userID": "integer",
+                            "productID": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Rating"
+                        }
+                    },
+                    "404": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "500": {
+                        "description": "Falha ao criar avaliação."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/rating/{id}": {
+            "put": {
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Encontra um avaliação pelo ID e atualiza no sistema.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Avaliação para ser atualizada. ",
+                        "required": true,
+                        "example": {
+                            "description": "string",
+                            "rate": "integer",
+                            "userID": "integer",
+                            "productID": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operação feita com sucesso.",
+                        "schema": {
+                            "$ref": "#/definitions/Rating"
+                        }
+                    },
+                    "400": {
+                        "description": "Preencha os campos corretamente antes de enviar."
+                    },
+                    "404": {
+                        "description": "Avaliação não encontrada."
+                    },
+                    "500": {
+                        "description": "Falha ao atualizar avaliação."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rating"
+                ],
+                "summary": "Encontra uma avaliação pelo ID e deleta do sistema.",
+                "description": "Retorna uma mensagem de sucesso ou erro.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da avaliação.",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exclusão feita com sucesso!"
+                    },
+                    "404": {
+                        "description": "Avaliação não encontrado."
+                    },
+                    "500": {
+                        "description": "Falha ao excluir avaliação."
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets",
+                            "update:users",
+                            "delete:users"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "securityDefinitions": {
+        "amigostore_auth": {
+            "type": "basic",
+            "authorizationUrl": "https://localhost:4563/auth",
+            "scopes": {
+                "read:users": "read your users",
+                "write:users": "modify users",
+                "update:users": "update users",
+                "delete:users": "delete users"
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "idUser": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "User Teste"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "Amos@email.com"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "User"
+                },
+                "birthDate": {
+                    "type": "string",
+                    "example": "01-01-2023"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123456789"
+                },
+                "image": {
+                    "type": "string",
+                    "example": "/uploads/44536789314456577"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                }
+            }
+        },
+        "Product": {
+            "type": "object",
+            "properties": {
+                "idProduct": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Objeto"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Caneta azul..."
+                },
+                "price": {
+                    "type": "float",
+                    "example": 2.00
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "tags": {
+                    "type": "string",
+                    "example": "objeto,escolar"
+                },
+                "image": {
+                    "type": "string",
+                    "example": "/uploads/44536789314456577"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "ProductCategoryIdProductCategory": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "Address": {
+            "type": "object",
+            "properties": {
+                "idAdress": {
+                    "type": "integer",
+                    "format": "int32",
+                    "example": 33
+                },
+                "street": {
+                    "type": "string",
+                    "example": "Rua Teste"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "Bairro Teste"
+                },
+                "zipCode": {
+                    "type": "string",
+                    "example": "30045678"
+                },
+                "complement": {
+                    "type": "string",
+                    "example": "Proximo a.."
+                },
+                "userIdUser": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                }
+            }
+        },
+        "Card": {
+            "type": "object",
+            "properties": {
+                "idCard": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "number": {
+                    "type": "string",
+                    "example": "7777 8888 9999 6666"
+                },
+                "cvv": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "expDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "01-01-2030"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "userIdUser": {
+                    "type": "string",
+                    "example": "User Teste"
+                }
+            }
+        },
+        "ProductCategory": {
+            "type": "object",
+            "properties": {
+                "idProductCategory": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Roupas"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "roupas de todos os tipos"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                }
+            }
+        },
+        "Rating": {
+            "type": "object",
+            "properties": {
+                "idProductCategory": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Produto perfeito."
+                },
+                "rate": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-01-11T17:16:22.000Z"
+                },
+                "userIdUser": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "ProductIdProduct": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        }
+    }
+}
