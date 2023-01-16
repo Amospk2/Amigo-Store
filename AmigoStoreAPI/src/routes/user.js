@@ -11,7 +11,6 @@ routes.get("/users/", UserController.list);
 routes.post("/users", parser.single('image'), UserController.create);
 routes.put("/users/:id", UserController.update);
 routes.use('*', middlewares.typeCheck);
-
 routes.delete("/users/:id", UserController.delete);
 
 
