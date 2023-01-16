@@ -1,5 +1,6 @@
 const routes = require('express').Router();
 const ProductController = require('../controllers/ProductController');
+const middlewares = require('../utils/middlewares');
 
 const multer = require('multer');
 const parser = multer({ dest: 'public/uploads/' });

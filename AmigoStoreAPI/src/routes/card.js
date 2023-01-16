@@ -1,6 +1,6 @@
 const routes = require('express').Router();
 const cardController = require('../controllers/CardController');
-
+const middlewares = require('../utils/middlewares');
 
 // Card Routes
 routes.get("/card/:id", cardController.findUserCards);

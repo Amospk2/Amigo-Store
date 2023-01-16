@@ -1,7 +1,6 @@
 const routes = require('express').Router();
-
 const RatingController = require('../controllers/RatingController');
-
+const middlewares = require('../utils/middlewares');
 // Rating Routes
 routes.get("/rating/user-ratings/:id", RatingController.userRatings);
 routes.get("/rating/product-ratings/:id", RatingController.productRatings);
