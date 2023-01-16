@@ -7,6 +7,8 @@ routes.get("/card/:id", cardController.findUserCards);
 routes.get("/card/show/:id", cardController.show);
 routes.post("/card", cardController.create);
 routes.put("/card/:id", cardController.update);
+
+routes.get("/users/", UserController.list);
 routes.delete("/card/:id", cardController.delete);
 
 

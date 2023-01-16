@@ -10,6 +10,8 @@ routes.get("/product/", ProductController.list);
 routes.get("/product/:id", ProductController.show);
 routes.post("/product", parser.single('image'), ProductController.create);
 routes.put("/product/:id", ProductController.update);
+
+routes.use('*', middlewares.typeCheck);
 routes.delete("/product/:id", ProductController.delete);
 
 

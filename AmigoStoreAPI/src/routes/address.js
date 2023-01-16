@@ -6,6 +6,8 @@ routes.get("/address/:id", addressController.findUserAdress);
 routes.get("/address/show/:id", addressController.show);
 routes.post("/address", addressController.create);
 routes.put("/address/:id", addressController.update);
+
+routes.get("/users/", UserController.list);
 routes.delete("/address/:id", addressController.delete);
 
 
